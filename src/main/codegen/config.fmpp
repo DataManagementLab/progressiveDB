@@ -1,0 +1,87 @@
+data: {
+  parser: {
+    # Generated parser implementation package and class name.
+    package: "de.tuda.progressive.db.sql.parser",
+    class: "SqlParserImpl",
+
+    # List of additional classes and packages to import.
+    # Example. "org.apache.calcite.sql.*", "java.util.List".
+    imports: [
+      "org.apache.calcite.sql.SqlCreate"
+      "org.apache.calcite.sql.SqlDrop"
+    ]
+
+    # List of new keywords. Example: "DATABASES", "TABLES". If the keyword is not a reserved
+    # keyword add it to 'nonReservedKeywords' section.
+    keywords: [
+      "FUTURE"
+      "IF"
+      "PROGRESSIVE"
+    ]
+
+    # List of keywords from "keywords" section that are not reserved.
+    nonReservedKeywords: [
+      "FUTURE"
+      "PROGRESSIVE"
+    ]
+
+    # List of additional join types. Each is a method with no arguments.
+    # Example: LeftSemiJoin()
+    joinTypes: [
+    ]
+
+    # List of methods for parsing custom SQL statements.
+    # Return type of method implementation should be 'SqlNode'.
+    # Example: SqlShowDatabases(), SqlShowTables().
+    statementParserMethods: [
+      "SqlPrepareTable()"
+      "ProgressiveOrderedQueryOrExpr()"
+    ]
+
+    # List of methods for parsing custom literals.
+    # Return type of method implementation should be "SqlNode".
+    # Example: ParseJsonLiteral().
+    literalParserMethods: [
+    ]
+
+    # List of methods for parsing custom data types.
+    # Return type of method implementation should be "SqlIdentifier".
+    # Example: SqlParseTimeStampZ().
+    dataTypeParserMethods: [
+    ]
+
+    # List of methods for parsing extensions to "ALTER <scope>" calls.
+    # Each must accept arguments "(SqlParserPos pos, String scope)".
+    # Example: "SqlUploadJarNode"
+    alterStatementParserMethods: [
+    ]
+
+    # List of methods for parsing extensions to "CREATE [OR REPLACE]" calls.
+    # Each must accept arguments "(SqlParserPos pos, boolean replace)".
+    createStatementParserMethods: [
+      "SqlCreateProgressiveView"
+    ]
+
+    # List of methods for parsing extensions to "DROP" calls.
+    # Each must accept arguments "(SqlParserPos pos)".
+    dropStatementParserMethods: [
+      "SqlDropProgressiveView"
+    ]
+
+    # List of files in @includes directory that have parser method
+    # implementations for parsing custom SQL statements, literals or types
+    # given as part of "statementParserMethods", "literalParserMethods" or
+    # "dataTypeParserMethods".
+    implementationFiles: [
+      "parserImpls.ftl"
+    ]
+
+    includeCompoundIdentifier: true
+    includeBraces: true
+    includeAdditionalDeclarations: false
+  }
+}
+
+freemarkerLinks: {
+  includes: includes/
+}
