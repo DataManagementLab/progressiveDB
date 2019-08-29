@@ -16,5 +16,6 @@
 
   <modules>
     <module>core</module>
+    <module>standalone</module>
   </modules>
 </project>

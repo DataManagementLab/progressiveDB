@@ -22,8 +22,6 @@
         <slf4j.version>1.7.25</slf4j.version>
         <junit.version>5.1.0</junit.version>
         <sql2o.version>1.6.0</sql2o.version>
-        <commons-configuration2.version>2.4</commons-configuration2.version>
-        <commons-beanutils.version>1.9.3</commons-beanutils.version>
 
         <!-- jdbc -->
         <sqlite-jdbc.version>3.25.2</sqlite-jdbc.version>
@@ -45,21 +43,18 @@
             <groupId>org.apache.calcite</groupId>
             <artifactId>calcite-core</artifactId>
             <version>${calcite.version}</version>
-            <scope>provided</scope>
         </dependency>
 
         <dependency>
             <groupId>org.apache.calcite</groupId>
             <artifactId>calcite-server</artifactId>
             <version>${calcite.version}</version>
-            <scope>provided</scope>
         </dependency>
 
         <dependency>
             <groupId>org.apache.calcite.avatica</groupId>
             <artifactId>avatica-server</artifactId>
             <version>${avatica.version}</version>
-            <scope>provided</scope>
         </dependency>
 
         <dependency>
@@ -72,28 +67,12 @@
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-api</artifactId>
             <version>${slf4j.version}</version>
-            <scope>provided</scope>
         </dependency>
 
         <dependency>
             <groupId>org.sql2o</groupId>
             <artifactId>sql2o</artifactId>
             <version>${sql2o.version}</version>
-            <scope>provided</scope>
-        </dependency>
-
-        <dependency>
-            <groupId>org.apache.commons</groupId>
-            <artifactId>commons-configuration2</artifactId>
-            <version>${commons-configuration2.version}</version>
-            <scope>provided</scope>
-        </dependency>
-
-        <dependency>
-            <groupId>commons-beanutils</groupId>
-            <artifactId>commons-beanutils</artifactId>
-            <version>${commons-beanutils.version}</version>
-            <scope>provided</scope>
         </dependency>
 
         <dependency>
@@ -135,25 +114,6 @@
                     <source>${java.version}</source>
                     <target>${java.version}</target>
                 </configuration>
-            </plugin>
-
-            <plugin>
-                <artifactId>maven-assembly-plugin</artifactId>
-                <version>${maven-assembly-plugin.version}</version>
-                <configuration>
-                    <descriptorRefs>
-                        <descriptorRef>jar-with-dependencies</descriptorRef>
-                    </descriptorRefs>
-                </configuration>
-                <executions>
-                    <execution>
-                        <id>make-assembly</id>
-                        <phase>package</phase>
-                        <goals>
-                            <goal>single</goal>
-                        </goals>
-                    </execution>
-                </executions>
             </plugin>
 
             <plugin>
