@@ -18,7 +18,6 @@
         <!-- dependencies -->
         <calcite.version>1.17.0</calcite.version>
         <avatica.version>1.15.0</avatica.version>
-        <avatica-pdb.version>1.15.0-pdb</avatica-pdb.version>
         <slf4j.version>1.7.25</slf4j.version>
         <junit.version>5.1.0</junit.version>
         <sql2o.version>1.6.0</sql2o.version>
@@ -55,12 +54,6 @@
             <groupId>org.apache.calcite.avatica</groupId>
             <artifactId>avatica-server</artifactId>
             <version>${avatica.version}</version>
-        </dependency>
-
-        <dependency>
-            <groupId>org.apache.calcite.avatica</groupId>
-            <artifactId>avatica-core</artifactId>
-            <version>${avatica-pdb.version}</version>
         </dependency>
 
         <dependency>
