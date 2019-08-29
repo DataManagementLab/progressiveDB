@@ -37,6 +37,7 @@ public class Main {
             config.getString("tmp.password", null)
         )
         .port(config.getInt("port", 9000))
+        .port(config.getInt("chunkSize", -1))
         .build();
 
     server.start();

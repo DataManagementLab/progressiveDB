@@ -33,6 +33,8 @@ public class ProgressiveDbServer {
 
 	private int port;
 
+	private int chunkSize;
+
 	private HttpServer server;
 
 	private ProgressiveDbServer() {
@@ -42,14 +44,14 @@ public class ProgressiveDbServer {
 		if (server == null) {
 			log.info("starting");
 
-			final DbDriver sourceDriver = DbDriverFactory.create(sourceUrl);
+			final DbDriver sourceDriver = DbDriverFactory.create(sourceUrl, chunkSize);
 			final DbDriver bufferDriver = DbDriverFactory.create(tmpUrl);
 			final BaseContextFactory contextFactory = createContextFactory(sourceDriver, bufferDriver);
 			final DataBufferFactory dataBufferFactory = createDataBufferFactory(tmpUrl, tmpProperties);
 			final MetaData metaData = new JdbcMetaData(metaUrl, metaProperties);
 
 			final ProgressiveHandler progressiveHandler = new ProgressiveHandler(
-					DbDriverFactory.create(sourceUrl),
+					sourceDriver,
 					metaData,
 					contextFactory,
 					dataBufferFactory
@@ -107,6 +109,8 @@ public class ProgressiveDbServer {
 
 		private int port;
 
+		private int chunkSize = -1;
+
 		public Builder source(String url) {
 			source(url, null, null);
 			return this;
@@ -160,6 +164,11 @@ public class ProgressiveDbServer {
 			return this;
 		}
 
+		public Builder chunkSize(int chunkSize) {
+			this.chunkSize = chunkSize;
+			return this;
+		}
+
 		private Properties createProperties(String user, String password) {
 			Properties properties = new Properties();
 			if (user != null) {
@@ -180,6 +189,7 @@ public class ProgressiveDbServer {
 			server.tmpUrl = tmpUrl;
 			server.tmpProperties = tmpProperties;
 			server.port = port;
+			server.chunkSize = chunkSize;
 			return server;
 		}
 	}
