@@ -18,6 +18,7 @@ import java.util.Properties;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 import java.util.function.Function;
+import java.util.regex.Pattern;
 import org.apache.calcite.avatica.MissingResultsException;
 import org.apache.calcite.avatica.NoSuchStatementException;
 import org.apache.calcite.avatica.QueryState;
@@ -30,6 +31,7 @@ import org.apache.calcite.sql.SqlNode;
 import org.apache.calcite.sql.SqlOrderBy;
 import org.apache.calcite.sql.parser.SqlParseException;
 import org.apache.calcite.sql.parser.SqlParser;
+import org.apache.calcite.sql.parser.ddl.SqlDdlParserImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -37,16 +39,25 @@ public class ProgressiveMeta extends JdbcMeta {
 
   private static final Logger log = LoggerFactory.getLogger(ProgressiveMeta.class);
 
+  private static final Pattern DDL_PATTERN = Pattern
+      .compile("^(create|alter|drop)(?!\\s*progressive)", Pattern.CASE_INSENSITIVE);
+
   private final ConcurrentMap<Integer, ProgressiveStatement> statements = new ConcurrentHashMap<>();
   private final ConcurrentMap<Integer, ProgressiveStatement> durableStatements =
       new ConcurrentHashMap<>();
 
   private final ProgressiveHandler progressiveHandler;
 
-  private final SqlParser.Config parserConfig =
+  private final SqlParser.Config progressiveParserConfig =
       SqlParser.configBuilder()
           .setCaseSensitive(true)
           .setParserFactory(SqlParserImpl.FACTORY)
+          .build();
+
+  private final SqlParser.Config ddlParserConfig =
+      SqlParser.configBuilder()
+          .setCaseSensitive(true)
+          .setParserFactory(SqlDdlParserImpl.FACTORY)
           .build();
 
   public ProgressiveMeta(String url, ProgressiveHandler progressiveHandler) throws SQLException {
@@ -85,7 +96,8 @@ public class ProgressiveMeta extends JdbcMeta {
   private void init() {
     // warm up parser
     try {
-      SqlParser.create("select * from dual", parserConfig).parseStmt();
+      SqlParser.create("select * from dual", progressiveParserConfig).parseStmt();
+      SqlParser.create("select * from dual", ddlParserConfig).parseStmt();
     } catch (SqlParseException e) {
       // do nothing
     }
@@ -303,6 +315,9 @@ public class ProgressiveMeta extends JdbcMeta {
   }
 
   private SqlNode parse(String sql) {
+    final SqlParser.Config parserConfig =
+        DDL_PATTERN.matcher(sql).find() ? ddlParserConfig : progressiveParserConfig;
+
     try {
       return SqlParser.create(sql, parserConfig).parseStmt();
     } catch (SqlParseException e) {
