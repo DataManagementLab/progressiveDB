@@ -8,6 +8,7 @@ import de.tuda.progressive.db.util.SqlUtils;
 import org.apache.calcite.sql.ddl.SqlDropTable;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import java.sql.*;

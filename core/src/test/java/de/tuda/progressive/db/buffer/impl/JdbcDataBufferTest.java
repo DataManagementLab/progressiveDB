@@ -240,18 +240,4 @@ class JdbcDataBufferTest {
             Arrays.asList(new Object[] {0, 0, 0.5, 0.5, "a"}, new Object[] {0, 0, 0.5, 0.5, "b"}),
             Arrays.asList(new Object[] {1, 1, 1.0, 1.0, "a"}, new Object[] {1, 1, 1.0, 1.0, "b"})));
   }
-
-  void test() throws Throwable {
-    final JdbcSelectContext context =
-        builder()
-            .metaFields(Arrays.asList(MetaField.SUM, MetaField.SUM, MetaField.NONE, MetaField.NONE))
-            .selectBuffer(parse("select a / ?, b / ?, c, d from b"))
-            .build();
-
-    test(
-        context,
-        Arrays.asList(
-            Arrays.asList(new Object[] {12.0, 16.0, "a", "a"}, new Object[] {20.0, 24.0, "b", "b"}),
-            Arrays.asList(new Object[] {6.0, 8.0, "a", "a"}, new Object[] {10.0, 12.0, "b", "b"})));
-  }
 }
