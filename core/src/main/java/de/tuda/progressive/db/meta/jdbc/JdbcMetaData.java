@@ -57,7 +57,7 @@ public class JdbcMetaData implements MetaData {
           COLUMNS_TABLE_NAME);
   private static final String GET_COLUMN =
       String.format(
-          "select * from %s where `table` = :table and `name` = :name", COLUMNS_TABLE_NAME);
+          "select * from %s where `table` = :table and `name` like :name", COLUMNS_TABLE_NAME);
 
   private final Sql2o sql2o;
 
@@ -134,10 +134,19 @@ public class JdbcMetaData implements MetaData {
   @Override
   public Column getColumn(String table, String column) {
     try (Connection con = sql2o.open()) {
-      return con.createQuery(GET_COLUMN)
+      final List<Column> columns = con.createQuery(GET_COLUMN)
           .addParameter("table", table)
           .addParameter("name", column)
-          .executeAndFetchFirst(Column.class);
-    }
+          .executeAndFetch(Column.class);
+
+      if (columns.size() == 1) {
+        return columns.get(0);
+      } else {
+        return columns.stream()
+            .filter(c -> c.getName().equals(column))
+            .findFirst()
+            .orElse(null);
+      }
+     }
   }
 }
