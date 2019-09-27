@@ -1,23 +1,28 @@
 package de.tuda.progressive.db.statement.context;
 
+import java.sql.Types;
+
 public enum MetaField {
-  NONE(false, false),
-  AVG(false, false),
-  COUNT(false, true),
-  SUM(false, true),
-  FUTURE_GROUP(false, false),
-  FUTURE_WHERE(false, false),
-  PARTITION(true, true),
-  PROGRESS(true, true),
-  CONFIDENCE_INTERVAL(true, false);
+  NONE(false, false, Types.NULL),
+  AVG(false, false, Types.DOUBLE),
+  COUNT(false, true, Types.DOUBLE),
+  SUM(false, true, Types.DOUBLE),
+  FUTURE_GROUP(false, false, Types.NULL),
+  FUTURE_WHERE(false, false, Types.NULL),
+  PARTITION(true, true, Types.INTEGER),
+  PROGRESS(true, true, Types.DOUBLE),
+  CONFIDENCE_INTERVAL(true, false, Types.DOUBLE);
 
   private final boolean function;
 
   private final boolean substitute;
 
-  MetaField(boolean function, boolean substitute) {
+  private final int sqlType;
+
+  MetaField(boolean function, boolean substitute, int sqlType) {
     this.function = function;
     this.substitute = substitute;
+    this.sqlType = sqlType;
   }
 
   public boolean isFunction() {
@@ -26,5 +31,9 @@ public enum MetaField {
 
   public boolean isSubstitute() {
     return substitute;
+  }
+
+  public int getSqlType() {
+    return sqlType;
   }
 }

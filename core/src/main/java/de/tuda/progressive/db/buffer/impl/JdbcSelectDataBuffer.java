@@ -3,6 +3,7 @@ package de.tuda.progressive.db.buffer.impl;
 import de.tuda.progressive.db.buffer.SelectDataBuffer;
 import de.tuda.progressive.db.driver.DbDriver;
 import de.tuda.progressive.db.exception.ProgressiveException;
+import de.tuda.progressive.db.meta.MetaData;
 import de.tuda.progressive.db.statement.ResultSetMetaDataWrapper;
 import de.tuda.progressive.db.statement.context.MetaField;
 import de.tuda.progressive.db.statement.context.impl.BaseContext;
@@ -63,7 +64,7 @@ public class JdbcSelectDataBuffer<C extends BaseContext> implements SelectDataBu
     }
 
     try {
-      return new ResultSetMetaDataWrapper(statement.getMetaData());
+      return new ResultSetMetaDataWrapper(statement.getMetaData(), context.getMetaFields());
     } catch (SQLException e) {
       throw new ProgressiveException(e);
     }

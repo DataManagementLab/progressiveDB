@@ -1,11 +1,13 @@
 package de.tuda.progressive.db.statement;
 
 import de.tuda.progressive.db.exception.ProgressiveException;
+import de.tuda.progressive.db.statement.context.MetaField;
 import de.tuda.progressive.db.util.SqlFunction;
 
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.sql.Types;
+import java.util.List;
 
 public class ResultSetMetaDataWrapper implements ResultSetMetaData {
 
@@ -30,9 +32,13 @@ public class ResultSetMetaDataWrapper implements ResultSetMetaData {
 	private final String[] columnClassNames;
 
 	public ResultSetMetaDataWrapper(ResultSetMetaData metaData) throws SQLException {
+		this(metaData, null);
+	}
+
+	public ResultSetMetaDataWrapper(ResultSetMetaData metaData, List<MetaField> metaFields) throws SQLException {
 		this.metaData = metaData;
 		this.columnCount = metaData.getColumnCount();
-		this.columnTypes = getColumnTypes(metaData);
+		this.columnTypes = getColumnTypes(metaData, metaFields);
 		this.columnTypeNames = get(metaData::getColumnTypeName);
 		this.columnLabels = get(metaData::getColumnLabel);
 		this.columnNames = get(metaData::getColumnName);
@@ -42,11 +48,17 @@ public class ResultSetMetaDataWrapper implements ResultSetMetaData {
 		this.columnClassNames = get(metaData::getColumnClassName);
 	}
 
-	private int[] getColumnTypes(ResultSetMetaData metaData) {
+	private int[] getColumnTypes(ResultSetMetaData metaData, List<MetaField> metaFields) {
 		try {
 			int[] types = new int[metaData.getColumnCount()];
 			for (int i = 0; i < types.length; i++) {
-				int type = metaData.getColumnType(i + 1);
+				int type = Types.NULL;
+				if (metaFields != null) {
+					type = metaFields.get(i).getSqlType();
+				}
+				if (type == Types.NULL) {
+					type = metaData.getColumnType(i + 1);
+				}
 				types[i] = type == Types.NULL ? Types.OTHER : type;
 			}
 			return types;
