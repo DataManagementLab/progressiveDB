@@ -5,6 +5,7 @@ import java.io.File;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.sql.Statement;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.AfterEach;
@@ -171,5 +172,14 @@ class ProgressiveDbServerTest {
         {5.0, "b"},
         {3.0, "a"},
     }});
+  }
+
+  @Test
+  void testHaving() throws Exception {
+    Assertions.assertThrows(
+        SQLException.class,
+        () -> test("SELECT PROGRESSIVE AVG(a), d FROM t GROUP BY d HAVING AVG(a)",
+            new Object[][][]{})
+    );
   }
 }

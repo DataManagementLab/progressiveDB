@@ -132,6 +132,10 @@ public abstract class BaseContextFactory<
   }
 
   protected final SqlSelect transformSelect(SqlSelect select, List<MetaField> metaFields) {
+    if (select.getHaving() != null) {
+      throw new IllegalArgumentException("having is not supported");
+    }
+
     final SqlNodeList oldSelectList = select.getSelectList();
     final SqlNodeList oldGroups = select.getGroup() == null ? SqlNodeList.EMPTY : select.getGroup();
 
@@ -208,7 +212,7 @@ public abstract class BaseContextFactory<
         from,
         where,
         groups.size() > 0 ? groups : null,
-        select.getHaving(),
+        null,
         select.getWindowList(),
         select.getOrderList(),
         select.getOffset(),

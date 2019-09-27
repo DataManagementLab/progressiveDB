@@ -619,7 +619,7 @@ public class JdbcContextFactory
         new SqlIdentifier(bufferTableName, SqlParserPos.ZERO),
         transformWhere(where),
         groupBy.size() == 0 ? null : groupBy,
-        null, // TODO
+        originalSelect.getHaving(),
         null,
         originalSelect.getOrderList(),
         null,
