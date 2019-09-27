@@ -107,7 +107,7 @@ public class ProgressiveDbServer {
 		private String tmpUrl;
 		private Properties tmpProperties;
 
-		private int port;
+		private int port = 9000;
 
 		private int chunkSize = -1;
 
