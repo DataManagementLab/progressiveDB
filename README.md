@@ -131,9 +131,9 @@ try (Connection connection = DriverManager.getConnection("jdbc:avatica:remote:ur
 
     try (ResultSet result = statement.executeQuery("SELECT PROGRESSIVE AVG(a), b, PROGRESSIVE_PROGRESS() from test GROUP BY b")) {
       while (result.next()) {
-        final double avg = ((BigDecimal) result.getObject(1)).doubleValue();
+        final double avg = result.getDouble(1);
         final String group = result.getString(2);
-        final double progress = ((BigDecimal) result.getObject(3)).doubleValue();
+        final double progress = result.getDouble(3);
 
         System.out.printf("%f | %s | %f\n", avg, group, progress);
       }
@@ -148,8 +148,6 @@ try (Connection connection = DriverManager.getConnection("jdbc:avatica:remote:ur
 1.500000 | a | 1.000000
 3.500000 | b | 1.000000
 ```
-
-The complex statement `((BigDecimal) result.getObject(1)).doubleValue()` is needed since we struggle with some problems by using Apache Calcite Avatica as JDBC driver, but we are working to make the usage more natural.
 
 ## Progressive View
 
