@@ -157,7 +157,7 @@ public class ProgressiveMeta extends JdbcMeta {
   public ExecuteResult execute(
       StatementHandle h, List<TypedValue> parameterValues, int maxRowsInFirstFrame)
       throws NoSuchStatementException {
-    ProgressiveStatement statement = statements.get(h.id);
+    ProgressiveStatement statement = getStatement(h.id);
     if (statement == null) {
       return super.execute(h, parameterValues, maxRowsInFirstFrame);
     }
@@ -168,7 +168,7 @@ public class ProgressiveMeta extends JdbcMeta {
   @Override
   public Frame fetch(StatementHandle h, long offset, int fetchMaxRowCount)
       throws NoSuchStatementException, MissingResultsException {
-    final ProgressiveStatement statement = statements.get(h.id);
+    final ProgressiveStatement statement = getStatement(h.id);
     if (statement == null) {
       return super.fetch(h, offset, fetchMaxRowCount);
     }
@@ -184,7 +184,7 @@ public class ProgressiveMeta extends JdbcMeta {
 
   @Override
   public void closeStatement(StatementHandle h) {
-    final ProgressiveStatement statement = statements.get(h.id);
+    final ProgressiveStatement statement = getStatement(h.id);
     if (statement == null) {
       super.closeStatement(h);
     } else {
@@ -196,7 +196,7 @@ public class ProgressiveMeta extends JdbcMeta {
   @Override
   public boolean syncResults(StatementHandle h, QueryState state, long offset)
       throws NoSuchStatementException {
-    final ProgressiveStatement statement = statements.get(h.id);
+    final ProgressiveStatement statement = getStatement(h.id);
     if (statement == null) {
       return super.syncResults(h, state, offset);
     } else {
@@ -217,6 +217,14 @@ public class ProgressiveMeta extends JdbcMeta {
     } else {
       durableStatements.putIfAbsent(handleId, statement);
     }
+  }
+
+  private ProgressiveStatement getStatement(int handleId) {
+    ProgressiveStatement statement = statements.get(handleId);
+    if (statement == null) {
+      statement = durableStatements.get(handleId);
+    }
+    return statement;
   }
 
   private ExecuteResult hookPrepareAndExecute(
