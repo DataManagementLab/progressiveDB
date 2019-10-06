@@ -35,7 +35,13 @@ try (Connection connection = DriverManager.getConnection("jdbc:avatica:remote:ur
 Continue reading to get to know how ProgressiveDB can be used.
 
 # Setup
-You can either embed ProgressiveDB into your App or download the standalone version from <https://github.com/DataManagementLab/progressiveDB/releases>. The embedded version is provided via:
+You can either embed ProgressiveDB into your App or download the standalone version from <https://github.com/DataManagementLab/progressiveDB/releases>. The embedded version must be compiled first on your own:
+```shell script
+git clone git@github.com:DataManagementLab/progressiveDB.git
+cd progressiveDB
+mvn clean install -DskipTests
+```
+You are now able to include the core into your project:
 ```xml
 <dependency>
   <groupId>de.tuda.progressive.db</groupId>
