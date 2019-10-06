@@ -7,7 +7,6 @@ import org.junit.jupiter.api.BeforeAll;
 import org.testcontainers.containers.PostgreSQLContainer;
 
 import java.sql.DriverManager;
-import java.sql.SQLException;
 
 class PostgreSQLDriverTest extends PartitionDriverTest {
 

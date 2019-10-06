@@ -48,7 +48,7 @@ public abstract class AbstractDriver implements DbDriver {
   protected static final String PART_COLUMN_NAME = "_partition";
 
   private static final String INSERT_PART_TPL =
-      "insert into %s select %s from (%s) t where row_number = %d";
+      "insert into %s select %s from (%s) t where _row_number = %d";
 
   private SqlDialect dialect;
 
@@ -177,7 +177,6 @@ public abstract class AbstractDriver implements DbDriver {
         final String sql =
             String.format(
                 INSERT_PART_TPL, getPartitionTable(table, i), toSql(columns), template, i);
-
         statement.execute(sql);
       }
     } catch (SQLException e) {

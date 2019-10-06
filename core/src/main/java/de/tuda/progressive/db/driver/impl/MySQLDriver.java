@@ -28,7 +28,7 @@ public class MySQLDriver extends PartitionDriver {
   private static final String PART_SINGLE_TPL = "partition %s values in (%d)";
 
   private static final String SELECT_TPL =
-      "select t.*, ((@row_number := @row_number + 1) %% %d) row_number from %s t, (select @row_number := 0) rn";
+      "select t.*, ((@row_number := @row_number + 1) %% %d) _row_number from %s t, (select @row_number := 0) rn";
 
   private MySQLDriver() {
   }
@@ -51,6 +51,7 @@ public class MySQLDriver extends PartitionDriver {
       final ResultSetMetaData metaData = srcStatement.getMetaData();
       final SqlCreateTable createTable =
           SqlUtils.createTable(this, metaData, null, getPartitionTable(table), PART_COLUMN);
+
       final String partitionsDef =
           String.format(
               PART_DEF,
@@ -58,7 +59,8 @@ public class MySQLDriver extends PartitionDriver {
                   ", ",
                   LongStream.range(0, partitions)
                       .mapToObj(i -> String.format(PART_SINGLE_TPL, getPartitionTable(table, i), i))
-                      .collect(Collectors.joining())));
+                      .collect(Collectors.toList())));
+
       final String createTableSql = String.format("%s %s", toSql(createTable), partitionsDef);
 
       try (Statement destStatement = connection.createStatement()) {
