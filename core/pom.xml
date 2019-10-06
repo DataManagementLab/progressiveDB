@@ -35,6 +35,9 @@
         <freemarker.version>2.3.25-incubating</freemarker.version>
         <fmpp.version>0.9.16</fmpp.version>
         <javacc-maven-plugin.version>2.4</javacc-maven-plugin.version>
+
+        <!-- for testing -->
+        <testcontainer.version>1.12.2</testcontainer.version>
     </properties>
 
     <dependencies>
@@ -72,6 +75,13 @@
             <groupId>org.postgresql</groupId>
             <artifactId>postgresql</artifactId>
             <version>${postgresql.version}</version>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.testcontainers</groupId>
+            <artifactId>postgresql</artifactId>
+            <version>${testcontainer.version}</version>
             <scope>test</scope>
         </dependency>
 
