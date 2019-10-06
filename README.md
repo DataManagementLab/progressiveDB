@@ -4,6 +4,36 @@ ProgressiveDB was presented as a demo at [VLDB 2019](http://www.vldb.org/pvldb/v
 
 ProgressiveDB connects via JDBC to a DBMS and provides a JDBC interface to connect to. Currently PostgreSQL and MySQL are supported as data source, however it is possible to add drivers for other database systems. 
 
+# Demo
+
+The demo setup can be run in a docker container. The original demo did not use a partitioned table for the exact execution. However, the provided docker image uses for both progressive and exact execution a partitioned table to save memory. Therefore the exact execution will probably much faster. The container can be started via the following command:
+
+```shell script
+docker run --name progressive-db-demo -p 5555:5432 -p 8000:8000 -p 8081:8081 -p 9001:9001 -d -e POSTGRES_DB=progressive -e PGDATA=/postgres bergic/progressive-db-demo:1.0
+```
+
+After starting the container the demo can be accessed via <http://localhost:8000/index.html>. The underlying PostgreSQL database can be accessed via `psql`:
+ ```shell script
+sudo -u psql -d progressive -h localhost -p 5555
+```
+
+You can also connect to the ProgressiveDB server. Include the following dependency into your project:
+
+```xml
+<dependency>
+    <groupId>org.apache.calcite.avatica</groupId>
+    <artifactId>avatica-core</artifactId>
+    <version>1.15.0</version>
+</dependency>
+```
+And connect via:
+```java
+try (Connection connection = DriverManager.getConnection("jdbc:avatica:remote:url=http://localhost:9001")) {
+    ...
+}
+```
+Continue reading to get to know how ProgressiveDB can be used.
+
 # Setup
 You can either embed ProgressiveDB into your App or download the standalone version from <https://github.com/DataManagementLab/progressiveDB/releases>. The embedded version is provided via:
 ```xml
