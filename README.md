@@ -200,8 +200,8 @@ try (Connection connection = DriverManager.getConnection("jdbc:avatica:remote:ur
 
     try (ResultSet result = statement.executeQuery("SELECT PROGRESSIVE * from pv WITH FUTURE WHERE b = 'b'")) {
       while (result.next()) {
-        final double avg = ((BigDecimal) result.getObject(1)).doubleValue();
-        final double progress = ((BigDecimal) result.getObject(2)).doubleValue();
+        final double avg = result.getDouble(1);
+        final double progress = result.getDouble(2);
 
         System.out.printf("%f | %f\n", avg, progress);
       }
@@ -209,9 +209,9 @@ try (Connection connection = DriverManager.getConnection("jdbc:avatica:remote:ur
 
     try (ResultSet result = statement.executeQuery("SELECT PROGRESSIVE * from pv WITH FUTURE GROUP BY b")) {
       while (result.next()) {
-        final double avg = ((BigDecimal) result.getObject(1)).doubleValue();
+        final double avg = result.getDouble(1);
         final String group = result.getString(2);
-        final double progress = ((BigDecimal) result.getObject(3)).doubleValue();
+        final double progress = result.getDouble(3);
 
         System.out.printf("%f | %s | %f\n", avg, group, progress);
       }
