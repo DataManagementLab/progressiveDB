@@ -7,18 +7,22 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+
+import org.junit.ClassRule;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.testcontainers.containers.PostgreSQLContainer;
 
 class ProgressiveDbServerTest {
 
-  private static String URL = "jdbc:postgresql://localhost:5432/progressive";
-  private static String USER = "postgres";
-  private static String PASSWORD = "postgres";
+  private static PostgreSQLContainer postgreSQLContainer = new PostgreSQLContainer("postgres:11")
+          .withDatabaseName("progressive")
+          .withUsername("postgres")
+          .withPassword("postgres");
 
   private static ProgressiveDbServer server;
 
@@ -26,7 +30,16 @@ class ProgressiveDbServerTest {
 
   @BeforeAll
   static void beforeAll() throws Exception {
-    try (Connection connection = DriverManager.getConnection(URL, USER, PASSWORD)) {
+    postgreSQLContainer.start();
+
+    // PostgreSQL needs some time to start in container
+    Thread.sleep(1000);
+
+    try (Connection connection = DriverManager.getConnection(
+            postgreSQLContainer.getJdbcUrl(),
+            postgreSQLContainer.getUsername(),
+            postgreSQLContainer.getPassword()
+    )) {
       try (Statement statement = connection.createStatement()) {
         statement.execute("DROP TABLE IF EXISTS t");
         statement.execute("CREATE TABLE t (a INTEGER, b INTEGER, c VARCHAR(100), d VARCHAR(100))");
@@ -44,7 +57,7 @@ class ProgressiveDbServerTest {
     }
 
     server = new ProgressiveDbServer.Builder()
-        .source(URL, USER, PASSWORD)
+        .source(postgreSQLContainer.getJdbcUrl(), postgreSQLContainer.getUsername(), postgreSQLContainer.getPassword())
         .tmp("jdbc:sqlite::memory:")
         .meta("jdbc:sqlite:" + metaFile)
         .port(9001)
@@ -74,6 +87,7 @@ class ProgressiveDbServerTest {
   @AfterAll
   static void afterAll() {
     server.stop();
+    postgreSQLContainer.stop();
   }
 
   private void test(String sql, Object[][][] expected) throws Exception {
