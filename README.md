@@ -234,3 +234,15 @@ ProgressiveDB provides some functions that are helpful for progressive execution
 | progressive_progress   |                                               | percentage of already processed data | 
 | progressive_partition  |                                               | last processed chunk                 | 
 | progressive_confidence | aggregation column (will probably be changed) | +/- confidence of the actual value   |
+
+# Driver
+ProgressiveDB currently supports the following databases with its tested minimum versions:
+
+| Database   | Version |
+| ---------- | ------- |
+| PostgreSQL | 11      |
+| MySQL      | 8       |
+
+The standalone version already includes the specific JDBC drivers, while you have to include them own your own when using the core.
+
+A new driver must implement the interface `de.tuda.progressive.db.driver.DbDriver` and needs to be registered via `de.tuda.progressive.db.driver.DbDriverFactory.register`.
