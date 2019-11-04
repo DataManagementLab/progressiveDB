@@ -24,7 +24,7 @@ public class SQLiteDriver extends AbstractDriver {
   public static final SqlDialect SQL_DIALECT =
       new AnsiSqlDialect(SqlDialect.EMPTY_CONTEXT.withIdentifierQuoteString("\""));
 
-  private static final String SELECT_TPL = "select t.*, (rowid %% %d) _row_number from %s t";
+  private static final String SELECT_TPL = "select t.*, (rowid %% %d) _partition_id from %s t";
 
   private static final String PRAGMA_TPL = "pragma table_info(%s)";
 

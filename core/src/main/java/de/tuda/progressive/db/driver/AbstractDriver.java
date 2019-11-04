@@ -48,7 +48,7 @@ public abstract class AbstractDriver implements DbDriver {
   protected static final String PART_COLUMN_NAME = "_partition";
 
   private static final String INSERT_PART_TPL =
-      "insert into %s select %s from (%s) t where _row_number = %d";
+      "insert into %s select %s from (%s) t where _partition_id = %d";
 
   private SqlDialect dialect;
 
@@ -184,6 +184,14 @@ public abstract class AbstractDriver implements DbDriver {
     }
   }
 
+  /**
+   * Must return a String that can be called via {@linkplain String#format(String, Object...)}. It must accept accept two
+   * arguments that are first an integer that defines the number of partitions and second a string that defines the table
+   * to be prepared. The returned template must select all columns of the to be prepared table and an added column called
+   * {@code _partition_id} that defines the target partition. A pseudo template could be the following:
+   * <pre>select t.*, (row_number() %% %d) _partition_id from %s t</pre>
+   * @return The template String
+   */
   protected abstract String getSelectTemplate();
 
   private long getPartitionCount(Connection connection, String table, long partitionSize) {

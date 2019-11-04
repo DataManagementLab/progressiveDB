@@ -31,7 +31,7 @@ public class PostgreSQLDriver extends PartitionDriver {
 
   private static final String PARTITION_TPL = "create table %s partition of %s for values in (%d)";
   private static final String SELECT_TPL =
-      "select t.*, (row_number() over() %% %d) _row_number from %s t";
+      "select t.*, (row_number() over() %% %d) _partition_id from %s t";
 
   @Override
   public String getPartitionTable(String table) {

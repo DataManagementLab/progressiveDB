@@ -28,7 +28,7 @@ public class MySQLDriver extends PartitionDriver {
   private static final String PART_SINGLE_TPL = "partition %s values in (%d)";
 
   private static final String SELECT_TPL =
-      "select t.*, ((@row_number := @row_number + 1) %% %d) _row_number from %s t, (select @row_number := 0) rn";
+      "select t.*, ((@row_number := @row_number + 1) %% %d) _partition_id from %s t, (select @row_number := 0) rn";
 
   private MySQLDriver() {
   }
