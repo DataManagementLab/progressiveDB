@@ -50,11 +50,20 @@ public class SqlUtils {
     return createTable(columns, cacheTableName, additionalColumns);
   }
 
+  /**
+   * Create the statement to create a table based of the structure of an existing table
+   * @param driver The database driver
+   * @param metaData MetaData of the original table
+   * @param fieldNames Names of the columns, if null is passed as parameter, the original name will be taken
+   * @param tableName New table name
+   * @param additionalColumns Additional columns that can be added
+   * @return The statement to create a table
+   */
   public static SqlCreateTable createTable(
       DbDriver driver,
       ResultSetMetaData metaData,
       List<String> fieldNames,
-      String cacheTableName,
+      String tableName,
       SqlNode... additionalColumns) {
     final SqlNodeList columns = new SqlNodeList(SqlParserPos.ZERO);
 
@@ -71,7 +80,7 @@ public class SqlUtils {
       throw new ProgressiveException(e);
     }
 
-    return createTable(columns, cacheTableName, additionalColumns);
+    return createTable(columns, tableName, additionalColumns);
   }
 
   public static SqlCreateTable createTable(SqlNodeList columns, String cacheTableName,

@@ -11,8 +11,10 @@ import org.apache.calcite.sql.parser.SqlParserPos;
 import org.apache.calcite.sql.type.SqlTypeName;
 
 import java.sql.Connection;
+import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.List;
 
 public abstract class PartitionDriver extends AbstractDriver {
 
@@ -33,6 +35,15 @@ public abstract class PartitionDriver extends AbstractDriver {
     }
   }
 
+  /**
+   * Creates the partitioned table in which data will be inserted. This is very specific for each database. The table must
+   * have the same structure as the table with an additional column that indicates the partition.
+   * {@linkplain SqlUtils#createTable(DbDriver, ResultSetMetaData, List, String, SqlNode...)} might be used as helper to
+   * copy the original data structure
+   * @param connection The connection
+   * @param table Original table name
+   * @param partitions Number of partitions
+   */
   protected abstract void createPartitionTable(Connection connection, String table, long partitions);
 
   @Override
