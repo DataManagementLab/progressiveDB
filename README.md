@@ -54,7 +54,7 @@ You are now able to include the core into your project:
 <dependency>
   <groupId>de.tuda.progressive.db</groupId>
   <artifactId>progressive-db-core</artifactId>
-  <version>0.2-SNAPSHOT</version>
+  <version>0.2</version>
 </dependency>
 ```
 

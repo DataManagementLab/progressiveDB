@@ -6,7 +6,7 @@
 
   <groupId>de.tuda.progressive.db</groupId>
   <artifactId>progressive-db</artifactId>
-  <version>0.2-SNAPSHOT</version>
+  <version>0.2</version>
   <packaging>pom</packaging>
 
   <properties>
