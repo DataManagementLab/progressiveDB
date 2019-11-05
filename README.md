@@ -9,7 +9,7 @@ ProgressiveDB connects via JDBC to a DBMS and provides a JDBC interface to conne
 The demo setup can be run in a docker container. The original demo did not use a partitioned table for the exact execution. However, the provided docker image uses for both progressive and exact execution a partitioned table to save memory. Therefore the exact execution will probably much faster. The container can be started via the following command:
 
 ```shell script
-docker run --name progressive-db-demo -p 5555:5432 -p 8000:8000 -p 8081:8081 -p 9001:9001 -d -e POSTGRES_DB=progressive -e PGDATA=/postgres bergic/progressive-db-demo:1.0
+docker run --name progressive-db-demo -p 5555:5432 -p 8000:8000 -p 8081:8081 -p 9001:9001 -d -e POSTGRES_DB=progressive -e PGDATA=/postgres bergic/progressive-db-demo:1.1
 ```
 
 After starting the container the demo can be accessed via <http://localhost:8000/index.html>. The underlying PostgreSQL database can be accessed via `psql`:
@@ -26,13 +26,21 @@ You can also connect to the ProgressiveDB server. Include the following dependen
     <version>1.15.0</version>
 </dependency>
 ```
-And connect via:
+An example query could be:
 ```java
 try (Connection connection = DriverManager.getConnection("jdbc:avatica:remote:url=http://localhost:9001")) {
-    ...
+    try (Statement statement = connection.createStatement()) {
+        try (ResultSet result = statement.executeQuery("SELECT PROGRESSIVE AVG(depdelay), origin, progressive_progress() FROM ontime1m GROUP BY origin")) {
+            while (result.next()) {
+                System.out.printf("%f | %s | %f\n", result.getDouble(1), result.getString(2), result.getDouble(3));
+            }
+        }
+    }
 }
 ```
-Continue reading to get to know how ProgressiveDB can be used.
+All fields of the table `ontime1m` can be found at: <http://stat-computing.org/dataexpo/2009/the-data.html>. The table `ontime1m` does not contain all entries of the original `ontime` table, but just the 40 biggest airports.
+
+Continue reading to get to know how ProgressiveDB can be used more detailed.
 
 # Setup
 You can either embed ProgressiveDB into your App or download the standalone version from <https://github.com/DataManagementLab/progressiveDB/releases>. The embedded version must be compiled first on your own:
