@@ -14,7 +14,7 @@ docker run --name progressive-db-demo -p 5555:5432 -p 8000:8000 -p 8081:8081 -p 
 
 After starting the container the demo can be accessed via <http://localhost:8000/index.html>. The underlying PostgreSQL database can be accessed via `psql`:
  ```shell script
-sudo -u psql -d progressive -h localhost -p 5555
+psql -U postgres -d progressive -h localhost -p 5555
 ```
 
 You can also connect to the ProgressiveDB server. Include the following dependency into your project:
