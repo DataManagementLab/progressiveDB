@@ -12,7 +12,7 @@ The demo setup can be run in a docker container. The original demo did not use a
 docker run --name progressive-db-demo -p 5555:5432 -p 8000:8000 -p 8081:8081 -p 9001:9001 -d -e POSTGRES_DB=progressive -e PGDATA=/postgres bergic/progressive-db-demo:1.1
 ```
 
-After starting the container the demo can be accessed via <http://localhost:8000/index.html>. The underlying PostgreSQL database can be accessed via `psql`:
+After starting the container (which will probably take a few minutes) the demo can be accessed via <http://localhost:8000/index.html>. The underlying PostgreSQL database can be accessed via `psql`:
  ```shell script
 psql -U postgres -d progressive -h localhost -p 5555
 ```
