@@ -18,7 +18,7 @@
     <!-- jdbc -->
     <sqlite-jdbc.version>3.25.2</sqlite-jdbc.version>
     <postgresql.version>42.2.5</postgresql.version>
-    <mysql.version>8.0.15</mysql.version>
+    <mysql.version>8.0.28</mysql.version>
 
     <!-- maven plugins -->
     <maven-compiler-plugin.version>3.8.0</maven-compiler-plugin.version>
