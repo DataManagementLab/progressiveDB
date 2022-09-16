@@ -16,7 +16,7 @@
         <templates.path>codegen/templates</templates.path>
 
         <!-- dependencies -->
-        <calcite.version>1.17.0</calcite.version>
+        <calcite.version>1.32.0</calcite.version>
         <avatica.version>1.15.0</avatica.version>
         <slf4j.version>1.7.25</slf4j.version>
         <junit.version>5.5.2</junit.version>
